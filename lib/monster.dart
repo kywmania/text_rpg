@@ -4,14 +4,15 @@ class Monster {
   String name;
   int hp;
   int atk;
+  int def;
 
-  Monster(this.name, this.hp, this.atk);
+  Monster(this.name, this.hp, this.atk, this.def);
 
   void attackCharacter(Character character, bool isDef) {
     print('$name의 턴');
     if (isDef == true) {
       int damage = (atk - character.def > 0) ? (atk - character.def) : 0;
-      character.hp -= (atk - character.def > 0) ? (atk - character.def) : 0;
+      character.hp -= damage;
       print('$name이(가) ${character.name}에게 $damage의 데미지를 입혔습니다.');
     } else {
       character.hp -= atk;
@@ -22,6 +23,6 @@ class Monster {
   }
 
   void showStatus() {
-    print('$name - 체력: ${hp > 0 ? hp : 0}, 공격력: $atk');
+    print('$name - 체력: ${hp > 0 ? hp : 0}, 공격력: $atk, 방어력: $def');
   }
 }

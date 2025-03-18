@@ -9,6 +9,7 @@ class Game {
   List<Monster> monsters = [];
   Random random = Random();
   int itemEffect = 2; //아이템 효과(공격력 2배) - atk = atk*item
+  int turnCount = 0; //진행된 턴 횟수 카운트 기록
 
   Future<void> loadCharacterStats() async {
     //캐릭터 스탯 불러오기
@@ -30,11 +31,12 @@ class Game {
     List<String> monsterData = contents.split(',');
 
     monsters.clear(); //리스트 초기화
-    for (int i = 0; i + 2 < monsterData.length; i += 3) {
+    for (int i = 0; i + 3 < monsterData.length; i += 4) {
       monsters.add(Monster(
         monsterData[i].trim(),
         int.tryParse(monsterData[i + 1].trim()) ?? 0,
         random.nextInt(int.tryParse(monsterData[i + 2].trim()) ?? 0), //공격력 랜덤
+        int.tryParse(monsterData[i + 3].trim()) ?? 0,
       ));
     }
   }
@@ -68,13 +70,25 @@ class Game {
     battle();
   }
 
-  //monster[0] random값으로 바꾸기
+  void increaseMonsterDef() {
+    monsters[randomMonster].def += 2;
+    print('${monsters[randomMonster].name}의 방어력이 증가했습니다!');
+    print('현재 방어력: ${monsters[randomMonster].def}');
+  }
+
   void battle() async {
     bool playerTurn = true;
     bool isDef = false;
 
     while (character.hp > 0 && monsters[randomMonster].hp > 0) {
       if (playerTurn == true) {
+        turnCount++;
+        print('$turnCount번째 턴!');
+        if (turnCount % 3 == 0) {
+          //3번째 턴마다 몬스터 방어력 증가
+          increaseMonsterDef();
+        }
+
         String choice = action();
         isDef = false;
         switch (choice) {

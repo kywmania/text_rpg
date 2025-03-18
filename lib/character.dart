@@ -18,8 +18,11 @@ class Character {
         print('현재 공격력 : ${atk * itemEffect}');
         break;
     }
-    monster.hp -= atk * itemEffect;
-    print('$name이(가) ${monster.name}에게 ${atk * itemEffect}의 데미지를 입혔습니다.');
+    int damage = (atk * itemEffect - monster.def) > 0
+        ? (atk * itemEffect - monster.def)
+        : 0;
+    monster.hp -= damage;
+    print('$name이(가) ${monster.name}에게 ${damage}의 데미지를 입혔습니다.');
     monster.showStatus();
   }
 
