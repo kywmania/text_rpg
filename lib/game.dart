@@ -10,6 +10,7 @@ class Game {
   Random random = Random();
 
   Future<void> loadCharacterStats() async {
+    //캐릭터 스탯 불러오기
     final File characterStats = File('assets/character.txt');
     String contents = await characterStats.readAsString();
     List<String> characterData = contents.split(',');
@@ -17,20 +18,32 @@ class Game {
     character.hp = int.tryParse(characterData[0]) ?? 0;
     character.atk = int.tryParse(characterData[1]) ?? 0;
     character.def = int.tryParse(characterData[2]) ?? 0;
+
+    bonus();
   }
 
   Future<void> loadMonsterStats() async {
+    //몬스터 스탯 불러오기
     final File monsterStats = File('assets/monsters.txt');
     String contents = await monsterStats.readAsString();
     List<String> monsterData = contents.split(',');
 
-    monsters.clear();
+    monsters.clear(); //리스트 초기화
     for (int i = 0; i + 2 < monsterData.length; i += 3) {
       monsters.add(Monster(
         monsterData[i].trim(),
         int.tryParse(monsterData[i + 1].trim()) ?? 0,
         random.nextInt(int.tryParse(monsterData[i + 2].trim()) ?? 0), //공격력 랜덤
       ));
+    }
+  }
+
+  void bonus() {
+    int bonus = random.nextInt(10);
+    if (bonus >= 0 && bonus <= 2) {
+      //보너스 체력
+      character.hp += 10;
+      print('보너스 체력을 얻었습니다! 현재 체력: ${character.hp}');
     }
   }
 
@@ -87,6 +100,7 @@ class Game {
       stdout.write('\n다음 몬스터와 싸우시겠습니까? (y/n): ');
       String? choice = stdin.readLineSync() ?? '';
       if (choice == 'y') {
+        await loadCharacterStats();
         await loadMonsterStats();
         startGame();
       }
