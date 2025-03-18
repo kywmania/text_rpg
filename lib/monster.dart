@@ -5,7 +5,7 @@ class Monster {
   int hp;
   int atk;
 
-  Monster(this.name, {this.hp = 50, this.atk = 10});
+  Monster(this.name, this.hp, this.atk);
 
   void attackCharacter(Character character, bool isDef) {
     print('$name의 턴');

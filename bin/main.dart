@@ -1,7 +1,8 @@
 import 'package:text_rpg/game.dart';
-//import 'package:text_rpg/character.dart';
 
-void main() {
+void main() async {
   Game game = Game();
+  await game.loadMonsterStats();
+  await game.loadCharacterStats();
   game.startGame();
 }
