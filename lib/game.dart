@@ -10,7 +10,7 @@ class Game {
   Random random = Random();
 
   Future<void> loadCharacterStats() async {
-    File characterStats = File('assets/character.txt');
+    final File characterStats = File('assets/character.txt');
     String contents = await characterStats.readAsString();
     List<String> characterData = contents.split(',');
 
@@ -20,15 +20,16 @@ class Game {
   }
 
   Future<void> loadMonsterStats() async {
-    File monsterStats = File('assets/monsters.txt');
+    final File monsterStats = File('assets/monsters.txt');
     String contents = await monsterStats.readAsString();
     List<String> monsterData = contents.split(',');
 
+    monsters.clear();
     for (int i = 0; i + 2 < monsterData.length; i += 3) {
       monsters.add(Monster(
         monsterData[i].trim(),
         int.tryParse(monsterData[i + 1].trim()) ?? 0,
-        random.nextInt(int.tryParse(monsterData[i + 2].trim()) ?? 0), //공격력 랜덤덤
+        random.nextInt(int.tryParse(monsterData[i + 2].trim()) ?? 0), //공격력 랜덤
       ));
     }
   }
@@ -79,8 +80,10 @@ class Game {
 
     if (character.hp <= 0) {
       print('플레이어가 사망했습니다.');
+      result('lose');
     } else if (monsters[randomMonster].hp <= 0) {
       print('${monsters[randomMonster].name}을(를) 물리쳤습니다!');
+      result('win');
       stdout.write('\n다음 몬스터와 싸우시겠습니까? (y/n): ');
       String? choice = stdin.readLineSync() ?? '';
       if (choice == 'y') {
@@ -88,6 +91,13 @@ class Game {
         startGame();
       }
     }
+  }
+
+  void result(String gameResult) async {
+    File result = File('assets/result.txt');
+    await result.writeAsString(
+        '${character.name}, ${character.hp}, ${gameResult}\n',
+        mode: FileMode.append);
   }
 
   String action() {
