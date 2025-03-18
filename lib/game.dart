@@ -39,15 +39,16 @@ class Game {
   }
 
   void bonus() {
+    //캐릭터 로드 시 30%확률로 보너스 체력 10 증가
     int bonus = random.nextInt(10);
     if (bonus >= 0 && bonus <= 2) {
-      //보너스 체력
       character.hp += 10;
       print('보너스 체력을 얻었습니다! 현재 체력: ${character.hp}');
     }
   }
 
   String createPlayer() {
+    //캐릭터 이름 생성
     String playerName = '';
     RegExp regex = RegExp(r'^[a-zA-Z]+$'); //영문만 허용
 
@@ -70,18 +71,22 @@ class Game {
   void battle() async {
     bool playerTurn = true;
     bool isDef = false;
+    int itemEffect = 2; //아이템 효과(공격력 2배) - atk = atk*item
 
     while (character.hp > 0 && monsters[randomMonster].hp > 0) {
       if (playerTurn == true) {
         String choice = action();
         isDef = false;
         switch (choice) {
-          case '1':
-            character.attackMonster(monsters[randomMonster]);
+          case '1': //공격
+            character.attackMonster(monsters[randomMonster], 1);
             break;
-          case '2':
+          case '2': //방어
             character.defend();
             isDef = true;
+            break;
+          case '3': //아이템 사용 - 공격력 2배인 상태로 공격
+            character.attackMonster(monsters[randomMonster], itemEffect);
             break;
         }
         playerTurn = !playerTurn; //턴 넘기기
@@ -89,6 +94,7 @@ class Game {
         monsters[randomMonster].attackCharacter(character, isDef);
         playerTurn = !playerTurn;
       }
+      itemEffect = 1;
     }
 
     if (character.hp <= 0) {
@@ -116,7 +122,7 @@ class Game {
 
   String action() {
     print('${character.name}님의 턴');
-    stdout.write('행동을 선택하세요 (1: 공격, 2: 방어): ');
+    stdout.write('행동을 선택하세요 (1: 공격, 2: 방어, 3:아이템 사용): ');
     String? action = stdin.readLineSync() ?? '';
     return action;
   }
