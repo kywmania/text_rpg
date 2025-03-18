@@ -8,3 +8,9 @@ kyw, 70, win
 kyw, 63, win
 kyw, 63, win
 kyw, 58, win
+dev, 70, win
+dev, 70, win
+dev, 70, win
+dev, 80, win
+dev, 70, win
+dev, 80, win

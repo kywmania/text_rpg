@@ -8,6 +8,7 @@ class Game {
   late int randomMonster;
   List<Monster> monsters = [];
   Random random = Random();
+  int itemEffect = 2; //아이템 효과(공격력 2배) - atk = atk*item
 
   Future<void> loadCharacterStats() async {
     //캐릭터 스탯 불러오기
@@ -71,7 +72,6 @@ class Game {
   void battle() async {
     bool playerTurn = true;
     bool isDef = false;
-    int itemEffect = 2; //아이템 효과(공격력 2배) - atk = atk*item
 
     while (character.hp > 0 && monsters[randomMonster].hp > 0) {
       if (playerTurn == true) {
@@ -87,6 +87,7 @@ class Game {
             break;
           case '3': //아이템 사용 - 공격력 2배인 상태로 공격
             character.attackMonster(monsters[randomMonster], itemEffect);
+            itemEffect = 1; //아이템은 한 번만 사용 가능
             break;
         }
         playerTurn = !playerTurn; //턴 넘기기
@@ -94,7 +95,6 @@ class Game {
         monsters[randomMonster].attackCharacter(character, isDef);
         playerTurn = !playerTurn;
       }
-      itemEffect = 1;
     }
 
     if (character.hp <= 0) {
