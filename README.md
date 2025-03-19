@@ -1,2 +1,11 @@
-A sample command-line application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
+🏹 텍스트 기반 RPG 게임
+이 프로젝트는 Dart로 개발된 텍스트 기반 RPG 게임입니다.
+플레이어는 캐릭터를 생성하고 몬스터와 전투를 진행하며, 공격/방어/아이템 사용 등의 액션을 선택할 수 있습니다.
+
+📌 기능
+✅ 캐릭터 생성 (영문 이름 입력)
+✅ 파일에서 캐릭터 및 몬스터 데이터 로드 (assets/character.txt, assets/monsters.txt)
+✅ 랜덤 몬스터와 전투 진행
+✅ 턴제 전투 시스템 (3턴마다 몬스터 방어력 증가)
+✅ 아이템 사용 기능 (공격력 2배 증가 효과)
+✅ 전투 결과 저장 (assets/result.txt)
