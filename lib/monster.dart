@@ -23,6 +23,7 @@ class Monster {
   }
 
   void showStatus() {
+    //체력이 0보다 작으면 0으로 표시
     print('$name - 체력: ${hp > 0 ? hp : 0}, 공격력: $atk, 방어력: $def');
   }
 }

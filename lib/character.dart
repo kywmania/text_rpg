@@ -8,19 +8,8 @@ class Character {
 
   Character(this.name, {this.hp = 50, this.atk = 10, this.def = 5});
 
-  void attackMonster(Monster monster, int itemEffect) {
-    switch (itemEffect) {
-      case 1:
-        print('아이템이 없습니다.');
-        break;
-      case 2:
-        print('아이템을 사용하였습니다. 한 턴간 공격력이 ${itemEffect}배가 됩니다.');
-        print('현재 공격력 : ${atk * itemEffect}');
-        break;
-    }
-    int damage = (atk * itemEffect - monster.def) > 0
-        ? (atk * itemEffect - monster.def)
-        : 0;
+  void attackMonster(Monster monster) {
+    int damage = (atk - monster.def) > 0 ? (atk - monster.def) : 0;
     monster.hp -= damage;
     print('$name이(가) ${monster.name}에게 ${damage}의 데미지를 입혔습니다.');
     monster.showStatus();
@@ -31,6 +20,7 @@ class Character {
   }
 
   void showStatus() {
+    //체력이 0보다 작으면 0으로 표시
     print('$name - 체력: ${hp > 0 ? hp : 0}, 공격력: $atk, 방어력: $def');
   }
 }

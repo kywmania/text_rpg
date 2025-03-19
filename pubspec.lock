@@ -153,6 +153,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.17"
+  menu_select:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "3517fe5525b2e2b620046c50f5868a4394272f2b"
+      url: "https://github.com/kywmania/menu_select.git"
+    source: git
+    version: "1.0.0"
   meta:
     dependency: transitive
     description:

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:menu_select/menu_select.dart';
 import 'package:text_rpg/character.dart';
 import 'package:text_rpg/monster.dart';
 
@@ -8,7 +9,7 @@ class Game {
   late int randomMonster;
   List<Monster> monsters = [];
   Random random = Random();
-  int itemEffect = 2; //아이템 효과(공격력 2배) - atk = atk*item
+  int item = 1; //아이탬 개수수
   int turnCount = 0; //진행된 턴 횟수 카운트 기록
 
   Future<void> loadCharacterStats() async {
@@ -26,11 +27,13 @@ class Game {
 
   Future<void> loadMonsterStats() async {
     //몬스터 스탯 불러오기
-    final File monsterStats = File('assets/monsters.txt');
-    String contents = await monsterStats.readAsString();
-    List<String> monsterData = contents.split(',');
 
     monsters.clear(); //리스트 초기화
+    final File monsterStats = File('assets/monsters.txt');
+    String contents = await monsterStats.readAsString();
+    List<String> monsterData =
+        contents.split('\n').expand((line) => line.split(',')).toList();
+
     for (int i = 0; i + 3 < monsterData.length; i += 4) {
       monsters.add(Monster(
         monsterData[i].trim(),
@@ -71,6 +74,7 @@ class Game {
   }
 
   void increaseMonsterDef() {
+    //몬스터 방어력 증가
     monsters[randomMonster].def += 2;
     print('${monsters[randomMonster].name}의 방어력이 증가했습니다!');
     print('현재 방어력: ${monsters[randomMonster].def}');
@@ -89,19 +93,29 @@ class Game {
           increaseMonsterDef();
         }
 
-        String choice = action();
+        print('${character.name}님의 턴');
+        stdout.write('(1: 공격, 2: 방어, 3:아이템 사용)\n');
+        String choice = menu(['1', '2', '3']);
+
         isDef = false;
         switch (choice) {
           case '1': //공격
-            character.attackMonster(monsters[randomMonster], 1);
+            character.attackMonster(monsters[randomMonster]);
             break;
           case '2': //방어
             character.defend();
             isDef = true;
             break;
-          case '3': //아이템 사용 - 공격력 2배인 상태로 공격
-            character.attackMonster(monsters[randomMonster], itemEffect);
-            itemEffect = 1; //아이템은 한 번만 사용 가능
+          case '3': //아이템 사용 후 공격
+            if (item > 0) {
+              character.atk *= 2;
+              character.attackMonster(monsters[randomMonster]);
+              character.atk ~/= 2;
+              item--;
+            } else {
+              print('아이템이 없습니다.');
+              character.attackMonster(monsters[randomMonster]);
+            }
             break;
         }
         playerTurn = !playerTurn; //턴 넘기기
@@ -117,12 +131,16 @@ class Game {
     } else if (monsters[randomMonster].hp <= 0) {
       print('${monsters[randomMonster].name}을(를) 물리쳤습니다!');
       result('win');
-      stdout.write('\n다음 몬스터와 싸우시겠습니까? (y/n): ');
-      String? choice = stdin.readLineSync() ?? '';
-      if (choice == 'y') {
-        await loadCharacterStats();
-        await loadMonsterStats();
-        startGame();
+      stdout.write('\n다음 몬스터와 싸우시겠습니까? (y/n)\n');
+      String choice = menu(['y', 'n']);
+      switch (choice) {
+        case 'y':
+          await loadMonsterStats();
+          startGame();
+          break;
+        case 'n':
+          print('게임을 종료합니다.');
+          exit(0);
       }
     }
   }
@@ -134,14 +152,8 @@ class Game {
         mode: FileMode.append);
   }
 
-  String action() {
-    print('${character.name}님의 턴');
-    stdout.write('행동을 선택하세요 (1: 공격, 2: 방어, 3:아이템 사용): ');
-    String? action = stdin.readLineSync() ?? '';
-    return action;
-  }
-
   void getRandomMonster() {
+    //랜덤으로 몬스터 선택
     randomMonster = random.nextInt(monsters.length);
     print('새로운 몬스터가 나왔습니다!');
     monsters[randomMonster].showStatus();
