@@ -1,6 +1,4 @@
-dev, 80, win
-kkk, 70, win
-dev, 80, win
-dev, 80, win, Instance of 'Monster',
-dev, 70, win, bat
 [dev vs spider] win, 70
+[dev vs spider] win, 70
+[dev vs spider] win, 70
+[dev vs bat] win, 80

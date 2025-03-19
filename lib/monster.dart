@@ -9,10 +9,13 @@ class Monster {
   Monster(this.name, this.hp, this.atk, this.def);
 
   void attackCharacter(Character character, bool isDef) {
-    print('$name의 턴');
+    print('==========');
+    print('$name의 턴 ');
+    print('==========');
     if (isDef == true) {
       int damage = (atk - character.def > 0) ? (atk - character.def) : 0;
       character.hp -= damage;
+
       print('$name이(가) ${character.name}에게 $damage의 데미지를 입혔습니다.');
     } else {
       character.hp -= atk;

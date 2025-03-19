@@ -92,8 +92,9 @@ class Game {
           //3번째 턴마다 몬스터 방어력 증가
           increaseMonsterDef();
         }
-
+        print('==========');
         print('${character.name}님의 턴');
+        print('==========');
         stdout.write('(1: 공격, 2: 방어, 3:아이템 사용)\n');
         String choice = menu(['1', '2', '3']);
 
