@@ -148,7 +148,7 @@ class Game {
   void result(String gameResult) async {
     File result = File('assets/result.txt');
     await result.writeAsString(
-        '${character.name}, ${character.hp}, ${gameResult}\n',
+        '[${character.name} vs ${monsters[randomMonster].name}] ${gameResult}, ${character.hp}\n',
         mode: FileMode.append);
   }
 
